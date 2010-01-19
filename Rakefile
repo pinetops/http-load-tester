@@ -5,12 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "http-load-tester"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{HTTP Load Testing DSL}
+#    gem.description = %Q{Longer description of your gem}
     gem.email = "tom.clarke@u2i.com"
     gem.homepage = "http://github.com/pinetops/http-load-tester"
     gem.authors = ["Tom Clarke"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", ">= 1.2.9"	
+    gem.add_dependency "httpclient"
+    gem.files = FileList['lib/**/*.rb']
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
