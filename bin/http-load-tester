@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'http-load-tester'
+
+::HttpLoadTester::Tester.run ARGV[0]
