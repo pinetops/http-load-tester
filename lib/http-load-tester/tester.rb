@@ -1,11 +1,20 @@
 module HttpLoadTester
   class Tester
     attr_reader :request_limit
+    
+    def self.run file
+      load file
+      self.new.run
+    end
 
     def initialize
       @requests = 0
       @count = 0
       @request_limit = 100
+    end
+
+    def self.scenario name, &block
+      $blocks << block
     end
     
     def run
@@ -72,6 +81,6 @@ end
 
 $blocks = []
 
-def scenario name, &block
+def self.scenario name, &block
   $blocks << block
 end
