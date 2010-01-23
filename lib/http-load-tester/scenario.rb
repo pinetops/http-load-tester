@@ -1,30 +1,25 @@
 class CompletedException < Exception; end
 
 module HttpLoadTester
-  class Client
-    attr_reader :client
-    
+  module Scenario
     def initialize(tester)
       @client = HTTPClient.new
-      @tester = tester
     end
-    
+
     def get uri, query
-      wait
+      on_start
 
-      client.get uri, query
+      @client.get uri, query
 
-      @tester.feedback
-      @tester.increment
+      on_completion
     end
     
     def post uri, body
-      wait
+      on_start
 
-      client.post uri, body
+      @client.post uri, body
 
-      @tester.feedback
-      @tester.increment
+      on_completion
     end
     
     def wait

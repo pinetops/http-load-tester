@@ -1,13 +1,19 @@
 module HttpLoadTester
   PROCS = 10
   REQUESTS = 500
-  
+
   class Tester
     attr_reader :request_limit
     
-    def self.run file
-      load file
-      self.new.run
+    class << self
+      def run file
+        load file
+        instance.run
+      end
+
+      def instance
+        @@tester ||= self.new
+      end
     end
 
     def initialize
@@ -16,45 +22,60 @@ module HttpLoadTester
       @request_limit = REQUESTS
     end
 
-    def self.scenario name, &block
-      $blocks << block
+    def scenarios
+      @scenarios ||= []
     end
     
-    def run
-      time = Time.now
-      
-      threads =[]
-
-      @blocks = []
+    def processes
+      processes = []
       PROCS.times do |i|
-        @blocks[i] = $blocks[rand($blocks.length)]
+        processes[i] = scenarios[rand(scenarios.length)]
       end
+      processes
+    end
 
+    def run
       puts "Warming up"
-      @blocks.each do |block|
-        threads << Thread.new(block) do |b|
+
+      run_scenarios
+      print_summary
+    end
+
+    def run_scenarios
+      processes.collect do |block|
+        Thread.new(block) do |b|
           begin
             while true
-              client = Client.new(self)
-              b.call(client) 
+              scenario_instance = b.new(self)
+              scenario_instance.on_start do
+                rand(5).times do
+                  raise CompletedException.new if @count >= request_limit
+                  sleep 1
+                end
+              end
+
+              scenario_instance.on_completion do
+                show_progress
+                increment
+              end
+              scenario_instance.execute
             end
           rescue CompletedException
           end  
         end
-      end
-      
-      threads.each do |t|
+      end.each do |t|
         t.join
       end
-      
+    end
+    
+    def print_summary
       puts
-      puts "#{@count}"
       x = @stop_time - @start_time
       puts "#{@count} request in #{x} seconds"
       puts "#{@count/x} requests per second"
     end
-
-    def feedback
+      
+    def show_progress
       STDOUT.print "."
       STDOUT.flush
     end
@@ -81,9 +102,4 @@ module HttpLoadTester
   end
 end
 
-
-$blocks = []
-
-def self.scenario name, &block
-  $blocks << block
-end
+include HttpLoadTester::DSL::Main

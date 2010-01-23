@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tom Clarke"]
-  s.date = %q{2010-01-20}
+  s.date = %q{2010-01-24}
   s.default_executable = %q{http-load-tester}
   s.email = %q{tom.clarke@u2i.com}
   s.executables = ["http-load-tester"]
@@ -19,7 +19,11 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "lib/http-load-tester.rb",
-     "lib/http-load-tester/client.rb",
+     "lib/http-load-tester/callbacks.rb",
+     "lib/http-load-tester/dsl.rb",
+     "lib/http-load-tester/dsl/main.rb",
+     "lib/http-load-tester/scenario.rb",
+     "lib/http-load-tester/scenario_factory.rb",
      "lib/http-load-tester/tester.rb"
   ]
   s.homepage = %q{http://github.com/pinetops/http-load-tester}
