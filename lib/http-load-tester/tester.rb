@@ -1,4 +1,7 @@
 module HttpLoadTester
+  PROCS = 10
+  REQUESTS = 500
+  
   class Tester
     attr_reader :request_limit
     
@@ -10,7 +13,7 @@ module HttpLoadTester
     def initialize
       @requests = 0
       @count = 0
-      @request_limit = 100
+      @request_limit = REQUESTS
     end
 
     def self.scenario name, &block
@@ -23,7 +26,7 @@ module HttpLoadTester
       threads =[]
 
       @blocks = []
-      100.times do |i|
+      PROCS.times do |i|
         @blocks[i] = $blocks[rand($blocks.length)]
       end
 
@@ -57,19 +60,19 @@ module HttpLoadTester
     end
 
     def increment
-      if @requests == $blocks.length
+      if @requests == PROCS
         @start_time = Time.new
         puts
         puts "Starting"
       end
 
-      if @requests == $blocks.length + @request_limit
+      if @requests == PROCS + @request_limit
         @stop_time = Time.new
         puts
         puts "Stopping"
       end
       
-      if @requests >= $blocks.length && @count < @request_limit
+      if @requests >= PROCS && @count < @request_limit
         @count += 1
       end
 

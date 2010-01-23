@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tom Clarke"]
-  s.date = %q{2010-01-18}
+  s.date = %q{2010-01-20}
   s.default_executable = %q{http-load-tester}
   s.email = %q{tom.clarke@u2i.com}
   s.executables = ["http-load-tester"]
