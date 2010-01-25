@@ -4,6 +4,13 @@ module HttpLoadTester
   module Scenario
     def initialize(tester)
       @client = HTTPClient.new
+      if ENV["DEBUG"]
+        @client.debug_dev = STDOUT
+      end
+    end
+
+    def add_cookie cookie
+      @client.cookie_manager.add cookie
     end
 
     def get uri, query
@@ -20,13 +27,6 @@ module HttpLoadTester
       response = @client.post uri, body
 
       on_completion uri, response
-    end
-    
-    def wait
-      rand(5).times do
-        raise CompletedException.new if @tester.instance_eval { @count } >= @tester.request_limit
-        sleep 1
-      end
     end
   end
 end
