@@ -1,8 +1,8 @@
 require 'thread'
 
 module HttpLoadTester
-  PROCS = 10
-  REQUESTS = 500
+  NUMBER_OF_PROCS = 10
+  NUMBER_OF_REQUESTS = 500
 
   class Tester
     include MonitorMixin
@@ -21,7 +21,6 @@ module HttpLoadTester
     def initialize
       @requests = 0
       @count = 0
-      @request_limit = REQUESTS
       @mutex = Mutex.new
     end
 
@@ -31,7 +30,7 @@ module HttpLoadTester
     
     def processes
       processes = []
-      PROCS.times do |i|
+      NUMBER_OF_PROCS.times do |i|
         processes[i] = scenarios[rand(scenarios.length)]
       end
       processes
@@ -52,7 +51,7 @@ module HttpLoadTester
               scenario_instance = b.new(self)
               scenario_instance.on_start do
                 rand(5).times do
-                  raise CompletedException.new if @count >= @request_limit
+                  raise CompletedException.new if @count >= NUMBER_OF_REQUESTS
                   sleep 1
                 end
               end
@@ -85,19 +84,19 @@ module HttpLoadTester
 
     def increment
       @mutex.synchronize do
-        if @requests == PROCS
+        if @requests == NUMBER_OF_PROCS
           @start_time = Time.new
           puts
           puts "Starting"
         end
         
-        if @requests == PROCS + @request_limit
+        if @requests == NUMBER_OF_PROCS + NUMBER_OF_REQUESTS
           @stop_time = Time.new
           puts
           puts "Stopping"
         end
       
-        if @requests >= PROCS && @count < @request_limit
+        if @requests >= NUMBER_OF_PROCS && @count < NUMBER_OF_REQUESTS
           @count += 1
         end
         
