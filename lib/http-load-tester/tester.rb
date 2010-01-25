@@ -7,8 +7,6 @@ module HttpLoadTester
   class Tester
     include MonitorMixin
 
-    attr_reader :request_limit
-    
     class << self
       def run file
         load file
@@ -54,7 +52,7 @@ module HttpLoadTester
               scenario_instance = b.new(self)
               scenario_instance.on_start do
                 rand(5).times do
-                  raise CompletedException.new if @count >= request_limit
+                  raise CompletedException.new if @count >= @request_limit
                   sleep 1
                 end
               end
