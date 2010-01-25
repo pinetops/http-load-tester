@@ -49,7 +49,11 @@ module HttpLoadTester
                 end
               end
               
-              scenario_instance.on_completion do
+              scenario_instance.on_completion do |uri, response|
+                if response.status != 200
+                  puts
+                  puts "#{uri} failed with status #{response.status}"
+                end
                 show_progress
                 increment
               end

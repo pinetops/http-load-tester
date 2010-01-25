@@ -9,17 +9,17 @@ module HttpLoadTester
     def get uri, query
       on_start
 
-      @client.get uri, query
-
-      on_completion
+      response = @client.get uri, query
+      
+      on_completion uri, response
     end
     
     def post uri, body
       on_start
 
-      @client.post uri, body
+      response = @client.post uri, body
 
-      on_completion
+      on_completion uri, response
     end
     
     def wait
