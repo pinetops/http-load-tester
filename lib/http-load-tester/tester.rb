@@ -1,8 +1,8 @@
 require 'thread'
 
 module HttpLoadTester
-  NUMBER_OF_PROCS = 10
-  NUMBER_OF_REQUESTS = 500
+  NUMBER_OF_PROCS = (ENV["PROCS"] || 10).to_i
+  NUMBER_OF_REQUESTS = (ENV["REQUESTS"] || 100).to_i
 
   class Tester
     include MonitorMixin
