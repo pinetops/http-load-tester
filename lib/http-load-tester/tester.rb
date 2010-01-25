@@ -44,7 +44,7 @@ module HttpLoadTester
 
               scenario_instance.on_start do
                 rand(5).times do
-                  raise CompletedException.new if @count >= NUMBER_OF_REQUESTS
+                  raise CompletedException.new if @stop_time
                   sleep 1
                 end
               end
@@ -88,7 +88,7 @@ module HttpLoadTester
           puts "Starting"
         end
         
-        if @requests == NUMBER_OF_PROCS + NUMBER_OF_REQUESTS
+        if @count == NUMBER_OF_REQUESTS
           @stop_time = Time.new
           puts
           puts "Stopping"
