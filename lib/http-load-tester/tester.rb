@@ -24,18 +24,10 @@ module HttpLoadTester
       @mutex = Mutex.new
     end
 
-    def scenarios
+    def scenario_classes
       @scenarios ||= []
     end
     
-    def processes
-      processes = []
-      NUMBER_OF_PROCS.times do |i|
-        processes[i] = scenarios[rand(scenarios.length)]
-      end
-      processes
-    end
-
     def run
       puts "Warming up"
 
@@ -44,22 +36,24 @@ module HttpLoadTester
     end
 
     def run_scenarios
-      processes.collect do |block|
-        Thread.new(block) do |b|
+      (0...NUMBER_OF_PROCS).collect do
+        Thread.new do
           begin
             while true
-              scenario_instance = b.new(self)
+              scenario_instance = scenario_classes[rand(scenario_classes.length)].new(self)
+
               scenario_instance.on_start do
                 rand(5).times do
                   raise CompletedException.new if @count >= NUMBER_OF_REQUESTS
                   sleep 1
                 end
               end
-
+              
               scenario_instance.on_completion do
                 show_progress
                 increment
               end
+
               scenario_instance.execute
             end
           rescue CompletedException

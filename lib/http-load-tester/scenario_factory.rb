@@ -16,7 +16,7 @@ module HttpLoadTester
           define_method :execute, block
         end
         
-        ::HttpLoadTester::Tester.instance.scenarios << scenario_class
+        ::HttpLoadTester::Tester.instance.scenario_classes << scenario_class
       end
     end
   end
